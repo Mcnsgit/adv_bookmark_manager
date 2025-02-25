@@ -18,7 +18,7 @@ const validateRegistration = [
 
 const validateLogin = [
     body('email').isEmail().withMessage('Invalid email'),   
-    body('password')
+    body('password'),
     validateToken
 ]
 module.exports = validateToken;
