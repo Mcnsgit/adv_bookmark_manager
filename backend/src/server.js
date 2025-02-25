@@ -32,7 +32,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/ping', (req, res) => {
   res.status(200).send('pong');
 });
-
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Bookmark Manager API is running',
+    version: '1.0.0',
+    status: 'OK'
+  });
+});
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
