@@ -3,39 +3,42 @@ const express = require('express');
 const http = require('http');
 const logger = require('morgan');
 const path = require('path');
-const router = require('./routes/auth');
-const { auth } = require('express-openid-connect');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const helmet = require('helmet');
+const authRoutes = require('./routes/auth');
+const bookmarkRoutes = require('./routes/bookmarks');
+//const folderRoutes = require('./routes/folders');
+//const noteRoutes = require('./routes/notes');
+const userRoutes = require('./routes/users');
 
-dotenv.load();
+// Load environment variables
+dotenv.config();
 
+// Initialize express app
 const app = express();
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
+// Middleware
 app.use(logger('dev'));
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cors());
+app.use(helmet());
 
-const config = {
-  authRequired: false,
-  auth0Logout: true
-};
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')));
 
-const port = process.env.PORT || 3000;
-if (!config.baseURL && !process.env.BASE_URL && process.env.PORT && process.env.NODE_ENV !== 'production') {
-  config.baseURL = `http://localhost:${port}`;
-}
-
-app.use(auth(config));
-
-// Middleware to make the `user` object available for all views
-app.use(function (req, res, next) {
-  res.locals.user = req.oidc.user;
-  next();
+// Add a simple ping endpoint
+app.get('/ping', (req, res) => {
+  res.status(200).send('pong');
 });
 
-app.use('/', router);
+// API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/bookmarks', bookmarkRoutes);
+//app.use('/api/folders', folderRoutes);
+//app.use('/api/notes', noteRoutes);
+app.use('/api/users', userRoutes);
 
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -46,14 +49,23 @@ app.use(function (req, res, next) {
 
 // Error handlers
 app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-    message: err.message,
-    error: process.env.NODE_ENV !== 'production' ? err : {}
+  console.error(err.stack);
+  
+  res.status(err.status || 500).json({
+    success: false,
+    error: err.message || 'Server Error',
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
   });
 });
 
+// Database connection
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/bookmark-manager')
+  .then(() => console.log('MongoDB connected...'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Start server
+const port = process.env.PORT || 3000;
 http.createServer(app)
   .listen(port, () => {
-    console.log(`Listening on ${config.baseURL}`);
+    console.log(`Server running on port ${port}`);
   });

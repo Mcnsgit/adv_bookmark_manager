@@ -1,18 +1,26 @@
-var router = require('express').Router();
-const { requiresAuth } = require('express-openid-connect');
+const express = require('express');
+const router = express.Router();
+const authController = require('../controllers/authController');
+const authMiddleware = require('../middleware/authMiddleware');
+//const { requiresAuth } = require('express-openid-connect');
 
-router.get('/', function (req, res, next) {
-  res.render('index', {
-    title: 'Auth0 Webapp sample Nodejs',
-    isAuthenticated: req.oidc.isAuthenticated()
-  });
-});
+router.post('/login', authController.login); // Fixed typo
+router.post('/logout', authController.logout);
 
-router.get('/profile', requiresAuth(), function (req, res, next) {
-  res.render('profile', {
-    userProfile: JSON.stringify(req.oidc.user, null, 2),
-    title: 'Profile page'
-  });
-});
 
+
+// Protect routes
+router.get('/me', authMiddleware.verifyToken, authController.getProfile);
+//router.get('/', (req, res) => { 
+//  res.render('index', {
+//    title: 'Auth0 Webapp sample Nodejs',
+//    isAuthenticated: req.oidc.isAuthenticated()
+//  });
+//});
+//router.get('/profile', requiresAuth(), (req, res) => { 
+//  res.render('profile', {
+//    userProfile: req.oidc.user,
+//    title: 'Profile page'
+//  });
+//});
 module.exports = router;
