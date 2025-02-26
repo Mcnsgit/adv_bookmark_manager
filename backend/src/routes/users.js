@@ -6,6 +6,7 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.use(authMiddleware.verifyToken);
 
 //user routes
+//router.get('/', userController.getAllUsers);
 router.get('/settings', userController.getUserSettings);
 router.put('/settings', userController.updateUserSettings);
 //router.get('/export', userController.exportUserData);

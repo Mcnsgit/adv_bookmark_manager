@@ -1,17 +1,25 @@
 // FILE: shared/constants/errors.js
 
 /**
- * Error codes
- * @enum {string}
+ * Error codes for consistent API responses
  */
 const ErrorCode = {
-    UNAUTHORIZED: 'UNAUTHORIZED',
+    SERVER_ERROR: 'SERVER_ERROR',
     NOT_FOUND: 'NOT_FOUND',
     VALIDATION_ERROR: 'VALIDATION_ERROR',
-    DUPLICATE_RESOURCE: 'DUPLICATE_RESOURCE',
-    SERVER_ERROR: 'SERVER_ERROR',
-    RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
+    UNAUTHORIZED: 'UNAUTHORIZED',
+    FORBIDDEN: 'FORBIDDEN',
+    INVALID_ID: 'INVALID_ID',
+    DUPLICATE_ERROR: 'DUPLICATE_ERROR',
+    CONFLICT: 'CONFLICT'
   };
+  
+  /**
+   * Default pagination constants
+   */
+  const DEFAULT_PAGE = 1;
+  const DEFAULT_LIMIT = 20;
+  const MAX_LIMIT = 100;
   
   /**
    * Error messages
@@ -26,7 +34,10 @@ const ErrorCode = {
     [ErrorCode.RATE_LIMIT_EXCEEDED]: 'Rate limit exceeded. Please try again later',
   };
   
-  module.exports = {
+module.exports = {
     ErrorCode,
+    DEFAULT_LIMIT,
+    DEFAULT_PAGE,
+    MAX_LIMIT,
     ERROR_MESSAGES
   };

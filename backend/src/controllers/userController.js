@@ -49,9 +49,9 @@ const userController = {
         message: 'Server error'
       });
     }
-  }
+    },
+
   
-  // Add other user controller methods as needed
 };
 
 module.exports = userController;

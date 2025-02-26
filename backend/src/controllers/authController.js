@@ -55,11 +55,8 @@ const authController = {
     login: async (req, res) => {
         try {
             const { email, password } = req.body;
-            const user = await User.findOne({
-                where: {
-                    email
-                }
-            });
+            const user = await User.findOne({ email });
+
             if (!user) {
                 return res.status(401).json({ message: 'Invalid credentials' });
             }
@@ -67,17 +64,28 @@ const authController = {
             if (!isPasswordValid) {
                 return res.status(401).json({ message: 'Invalid credentials' });
             }
-            const token = generateToken(user.id);
-            res.status(200).json({ token, user });
-        } catch (error) {
-            res.status(500).json({
-                success: false,
-                error: ErrorCode.SERVER_ERROR,
-                message: 'Server error',
-                stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
-            })
-        }
+
+            // Generate token
+            const token = jwt.sign({
+                id: user._id
             },
+            process.env.JWT_SECRET || 'your-secret-key-for-development',
+                { expiresIn: '30d' });
+
+            // Return user without password
+             // Return user without password
+        const userResponse = {
+            id: user._id,
+            email: user.email,
+            name: user.name,
+            settings: user.settings
+        };
+            res.status(200).json({ token, user: userResponse });
+        } catch (error) {
+            console.error('Login error:', error);
+            res.status(500).json({message: 'Server error'})
+        }
+    },
             logout: async (req, res) => {
                 try {
                     res.clearCookie('token');

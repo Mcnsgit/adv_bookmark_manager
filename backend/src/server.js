@@ -8,19 +8,22 @@ const cors = require('cors');
 const helmet = require('helmet');
 const authRoutes = require('./routes/auth');
 const bookmarkRoutes = require('./routes/bookmarks');
-//const folderRoutes = require('./routes/folders');
+const bodyParser = require('body-parser');
+const folderRoutes = require('./routes/folders');
 //const noteRoutes = require('./routes/notes');
 const userRoutes = require('./routes/users');
-
+const errorMiddleware = require('./middleware/errorMiddleware')
+const { body } = require('express-validator');
+const connectDB = require('./config/database');
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 // Initialize express app
 const app = express();
 
 // Middleware
 app.use(logger('dev'));
-app.use(express.json());
+app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 app.use(helmet());
@@ -42,10 +45,13 @@ app.get('/', (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
-//app.use('/api/folders', folderRoutes);
+app.use('/api/folders', folderRoutes);
 //app.use('/api/notes', noteRoutes);
 app.use('/api/users', userRoutes);
 
+app.use('/favicon.ico', (req, res) => {
+  res.sendStatus(204);
+});
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
   const err = new Error('Not Found');
@@ -53,25 +59,19 @@ app.use(function (req, res, next) {
   next(err);
 });
 
-// Error handlers
-app.use(function (err, req, res, next) {
-  console.error(err.stack);
-  
-  res.status(err.status || 500).json({
-    success: false,
-    error: err.message || 'Server Error',
-    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined
-  });
-});
+app.use(errorMiddleware.handleErrors)
 
-// Database connection
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/bookmark-manager')
-  .then(() => console.log('MongoDB connected...'))
-  .catch(err => console.error('MongoDB connection error:', err));
-
-// Start server
-const port = process.env.PORT || 3000;
-http.createServer(app)
-  .listen(port, () => {
-    console.log(`Server running on port ${port}`);
+// Connect to database
+connectDB()
+  .then(() => {
+    // Start server only after successful DB connection
+    const port = process.env.PORT || 3000;
+    http.createServer(app)
+      .listen(port, () => {
+        console.log(`Server running on http://localhost:${port}`);
+      });
+  })
+  .catch(err => {
+    console.error('Failed to connect to MongoDB', err);
+    process.exit(1);
   });

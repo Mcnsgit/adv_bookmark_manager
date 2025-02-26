@@ -4,13 +4,14 @@ const authController = require('../controllers/authController');
 const authMiddleware = require('../middleware/authMiddleware');
 //const { requiresAuth } = require('express-openid-connect');
 
+router.post('/register', authController.register);
 router.post('/login', authController.login); // Fixed typo
 router.post('/logout', authController.logout);
 
+router.get('/user', authMiddleware.verifyToken, authController.getProfile);
 
 
 // Protect routes
-router.get('/me', authMiddleware.verifyToken, authController.getProfile);
 //router.get('/', (req, res) => { 
 //  res.render('index', {
 //    title: 'Auth0 Webapp sample Nodejs',

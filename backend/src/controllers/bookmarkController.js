@@ -112,9 +112,179 @@ const bookmarkController = {
     } catch (error) {
       next(error);
     }
-  }
+  },
+  /**
+   * 
+   * @param {searchBookmarks} req 
+   * @param {*} res 
+   * @param {*} next 
+   * @returns 
+   */
+    //searchBookmarks
+  async searchBookmarks(req, res, next) {
+      try {
+          const { query } = req.query;
 
-  // Other controller methods follow similar pattern...
+          if (!query) {
+              return res.status(400).json({
+                  success: false,
+                  message: 'Search query is required'
+              });
+          }
+
+          try {
+              const results = await bookmarkService.searchBookmarks(req.user._id, query);
+              if (!results) {
+                  return res.status(404).json({
+                      success: false,
+                      message: 'No bookmarks found'
+                  });
+              }
+
+              res.jsons({
+                  success: true,
+                  data: results
+              });
+          } catch (error) {
+              next(error);
+          }
+      } catch (error) {
+          next(error);
+      }
+    },
+   /**
+ * Get all tags
+ */
+async getAllTags(req, res, next) {
+    try {
+      const tags = await bookmarkService.getAllTags(req.user._id);
+      
+      res.json({
+        success: true,
+        data: tags
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+  
+  
+  
+    //getRecentBookmarks
+  
+    //getBookmarkFavicon
+  
+    //getBookmarkById
+  async getBookmarkById(req, res, next) {
+      try {
+          const { id } = req.params;
+
+          const bookmark = await bookmarkService.getBookmarkById(id, req.user._id);
+
+          if(!bookmark) {
+              return res.status(404).json({
+                  success: false,
+                  message: 'Bookmark not found'
+              });
+          }
+
+          res.status(200).json({
+              success: true,
+              data: bookmark
+          });
+      } catch (error) {
+          next(error);
+          res.status(500).json({
+              success: false,
+              message: 'Server error'
+          })
+      }
+    },
+  
+    //updateBookmark
+    async updateBookmark(req, res, next) {
+        try {
+          const { id } = req.params;
+          const { title, description, tags, in_reading_list, reading_priority, pinned } = req.body;
+          
+          // Check if bookmark exists and belongs to user
+          const existingBookmark = await bookmarkService.getBookmarkById(id, req.user._id);
+          
+          if (!existingBookmark) {
+            return res.status(404).json({
+              success: false,
+              message: 'Bookmark not found'
+            });
+          }
+          
+          // Update bookmark
+          const updatedBookmark = await bookmarkService.updateBookmark(
+            id, 
+            req.user._id,
+            { title, description, tags, in_reading_list, reading_priority, pinned }
+          );
+          
+          res.json({
+            success: true,
+            data: updatedBookmark
+          });
+        } catch (error) {
+          next(error);
+        }
+      },
+  
+    //deleteBookmark
+    async deleteBookmark(req, res, next) {
+      try {
+        const { id } = req.params;
+         // Validate the ID format (assuming it's a string, you can use regex or other validation logic)
+    if (!id || typeof id !== 'string') {
+        return res.status(400).json({ error: 'Invalid bookmark ID format.' });
+      }
+      const result = await bookmarkService.deleteBookmark(id);
+      // Check if the bookmark was found and deleted
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ error: 'Bookmark not found.' });
+      }
+      res.status(200).json({ message: 'Bookmark deleted successfully.', result });
+    } catch (error) {
+      console.error('Error deleting bookmark:', error); // Log the error for debugging
+      next(error);
+    }
+    },
+    /**
+ * Get reading list
+ */
+async getReadingList(req, res, next) {
+    try {
+      const { 
+        page = DEFAULT_PAGE, 
+        limit = DEFAULT_LIMIT,
+        reading_priority,
+        sort_by = 'reading_priority',
+        sort_order = 'desc'
+      } = req.query;
+      
+      // Validate and normalize pagination params
+      const pageNum = parseInt(page, 10);
+      const limitNum = Math.min(parseInt(limit, 10), MAX_LIMIT);
+      
+      // Convert string to number for priority
+      const priorityNum = reading_priority ? parseInt(reading_priority, 10) : undefined;
+      
+      const result = await bookmarkService.getReadingList(req.user._id, {
+        page: pageNum,
+        limit: limitNum,
+        reading_priority: priorityNum,
+        sort_by,
+        sort_order
+      });
+      
+      res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
 };
 
 module.exports = bookmarkController;
