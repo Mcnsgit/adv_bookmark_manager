@@ -7,7 +7,7 @@ const bookmarkService = {
      * GEt all bookmarks with pagination and filters
      */
 
-    async getAllBookmarks(userId, options = {}) {
+    async getBookmarks(userId, options = {}) {
         const {
             page = 1,
             limit = 10,
@@ -79,16 +79,36 @@ const bookmarkService = {
      * create a new bookmark
      */
 
-    async createBookmark(userId, bookmarkData) {
+  async createBookmark(userId, bookmarkData) {
+    console.log('Creatingbookmark with data ', JSON.stringify(bookmarkData));
+    console.log('for user id', userId);
+
+    try {
         const bookmark = new Bookmark({
             ...bookmarkData,
             user_id: userId
         });
+      console.log('Bookmark modelcreated:', bookmark);
+      
+      const existingBookmark = await Bookmark.findOne({
+        url: bookmarkData.url,
+        user_id: userId
+      });
+      
+      if (existingBookmark) {
+        console.log('Bookmark with this URL already exists for user');
+        return existingBookmark;
+      }
+      const savedBookmark = await bookmark.save();
+      console.log('Bookmark savedsuccessfully:', savedBookmark);
 
-        await bookmark.save()
 
         return bookmark;
-    },
+    }catch (error) {
+        console.error('Error saving bookmark:', error);
+        throw error;
+    }
+  },
 
     /**
      * get bookmark by ID
@@ -157,7 +177,7 @@ const bookmarkService = {
    * Get reading list
    */
   async getReadingList(userId, options = {}) {
-    return await this.getBookmarks(userId, {
+    return await this.getAllBookmarks(userId, {
       ...options,
       in_reading_list: true
     });

@@ -10,6 +10,7 @@ const BookmarkSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
+    default: function () { returnthis.url; },
     trim: true
   },
   description: {

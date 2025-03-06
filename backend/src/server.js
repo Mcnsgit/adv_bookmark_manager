@@ -20,17 +20,37 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 // Initialize express app
 const app = express();
-
+const corsOptions = {
+  origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
 // Middleware
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
-app.use(helmet());
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://127.0.0.1:5173"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
+  next();
+});
 // Add a simple ping endpoint
 app.get('/ping', (req, res) => {
   res.status(200).send('pong');
@@ -42,6 +62,18 @@ app.get('/', (req, res) => {
     status: 'OK'
   });
 });
+
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const TestModel = mongoose.model('Test', new mongoose.Schema({ test: String, date: Date }));
+    const testDoc = await new TestModel({ test: 'test', date: new Date() }).save();
+    res.json({ success: true, data: testDoc });
+  } catch (error) {
+    console.error(' DB test error:', error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/bookmarks', bookmarkRoutes);
