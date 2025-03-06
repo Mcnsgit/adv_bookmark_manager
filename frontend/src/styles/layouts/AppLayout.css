@@ -1,0 +1,215 @@
+/**
+ * Main application layout styles
+ */
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* Basic layout structure */
+.content-wrapper {
+    flex-grow: 1;
+    overflow-x: hidden;
+    transition: all 0.3s ease;
+}
+
+.sidebar-open .content-wrapper {
+    margin-left: 0;
+}
+
+/* Grid background styles */
+.grid-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Gradient accents */
+.gradient-accent-left {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100vh;
+    z-index: 10;
+}
+
+.gradient-accent-right {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100vh;
+    z-index: 10;
+}
+
+/* Theme-specific styles */
+.theme-dark {
+    color: #fff;
+    background-color: #121212;
+}
+
+.theme-dark .content-wrapper {
+    background-color: #121212;
+}
+
+.theme-dark .grid-bg {
+    background-image: linear-gradient(to right, #00ffff 1px, transparent 1px),
+        linear-gradient(to bottom, #00ffff 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.05;
+}
+
+.theme-dark .gradient-accent-left,
+.theme-dark .gradient-accent-right {
+    background: linear-gradient(to bottom, #8B5CF6, #06B6D4, #8B5CF6);
+}
+
+/* Light theme */
+.theme-light {
+    color: #1a202c;
+    background-color: #f8f9fa;
+}
+
+.theme-light .content-wrapper {
+    background-color: #f8f9fa;
+}
+
+.theme-light .grid-bg {
+    display: none;
+}
+
+.theme-light .gradient-accent-left,
+.theme-light .gradient-accent-right {
+    background: linear-gradient(to bottom, #6366F1, #0EA5E9, #6366F1);
+}
+
+/* Cyberpunk theme */
+.theme-cyberpunk {
+    color: #fff;
+    background-color: #0D0221;
+}
+
+.theme-cyberpunk .content-wrapper {
+    background-color: #0D0221;
+}
+
+.theme-cyberpunk .grid-bg {
+    background-image: linear-gradient(to right, #00ffff 1px, transparent 1px),
+        linear-gradient(to bottom, #00ffff 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.1;
+}
+
+.theme-cyberpunk .gradient-accent-left,
+.theme-cyberpunk .gradient-accent-right {
+    background: linear-gradient(to bottom, #FF00FF, #00FFFF, #9400FF);
+}
+
+/* Page container */
+.page-container {
+    width: 100%;
+    padding: 1.5rem;
+    margin: 0 auto;
+}
+
+/* Responsive behavior */
+@media (min-width: 640px) {
+    .page-container {
+        max-width: 640px;
+    }
+}
+
+@media (min-width: 768px) {
+    .page-container {
+        max-width: 768px;
+        padding: 2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .page-container {
+        max-width: 1024px;
+    }
+
+    .content-wrapper {
+        margin-left: 16rem;
+        /* 256px - sidebar width */
+    }
+}
+
+@media (min-width: 1280px) {
+    .page-container {
+        max-width: 1280px;
+    }
+}
+
+/* Mobile sidebar behavior */
+@media (max-width: 1023px) {
+    .sidebar {
+        transform: translateX(-100%);
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 50;
+        transition: transform 0.3s ease;
+    }
+
+    .sidebar-open .sidebar {
+        transform: translateX(0);
+    }
+
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 40;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+    }
+
+    .sidebar-open .sidebar-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .content-wrapper {
+        margin-left: 0;
+    }
+}
+
+/* Animation classes */
+.fade-in {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

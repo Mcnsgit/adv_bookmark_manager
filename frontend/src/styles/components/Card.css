@@ -1,0 +1,214 @@
+/**
+ * Card component styles
+ */
+
+.card {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+/* Card variants - Dark theme */
+.theme-dark .card {
+    background-color: #1A1A1A;
+    border: 1px solid #333;
+}
+
+.theme-dark .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+}
+
+.theme-dark .card-header {
+    padding: 1rem;
+    border-bottom: 1px solid #333;
+}
+
+.theme-dark .card-body {
+    padding: 1rem;
+}
+
+.theme-dark .card-footer {
+    padding: 1rem;
+    border-top: 1px solid #333;
+}
+
+/* Pinned card - Dark theme */
+.theme-dark .card.pinned {
+    border-left: 4px solid #0CC;
+    background-color: #1E1E1E;
+}
+
+.theme-dark .card.pinned:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 204, 204, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* Card variants - Light theme */
+.theme-light .card {
+    background-color: #FFF;
+    border: 1px solid #E5E7EB;
+}
+
+.theme-light .card:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.theme-light .card-header {
+    padding: 1rem;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.theme-light .card-body {
+    padding: 1rem;
+}
+
+.theme-light .card-footer {
+    padding: 1rem;
+    border-top: 1px solid #E5E7EB;
+}
+
+/* Pinned card - Light theme */
+.theme-light .card.pinned {
+    border-left: 4px solid #0099AA;
+    background-color: #F9FAFB;
+}
+
+.theme-light .card.pinned:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 153, 170, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* Card variants - Cyberpunk theme */
+.theme-cyberpunk .card {
+    background-color: #0F0F29;
+    border: 1px solid #291D51;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.theme-cyberpunk .card:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.2), 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+.theme-cyberpunk .card-header {
+    padding: 1rem;
+    border-bottom: 1px solid #291D51;
+}
+
+.theme-cyberpunk .card-body {
+    padding: 1rem;
+}
+
+.theme-cyberpunk .card-footer {
+    padding: 1rem;
+    border-top: 1px solid #291D51;
+}
+
+/* Pinned card - Cyberpunk theme */
+.theme-cyberpunk .card.pinned {
+    border-left: 4px solid #00FFFF;
+    background-color: #181830;
+}
+
+.theme-cyberpunk .card.pinned:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), 0 0 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Card sizes */
+.card-sm {
+    max-width: 300px;
+}
+
+.card-md {
+    max-width: 500px;
+}
+
+.card-lg {
+    max-width: 700px;
+}
+
+.card-full {
+    width: 100%;
+}
+
+/* Special card styles */
+.card-glass {
+    background: rgba(30, 30, 30, 0.7);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-gradient {
+    background: linear-gradient(135deg, #1A1A2E 0%, #16213E 100%);
+}
+
+/* Card with glowing border */
+.card-glow {
+    position: relative;
+}
+
+.theme-dark .card-glow {
+    box-shadow: 0 0 5px rgba(0, 204, 204, 0.5);
+    border: 1px solid rgba(0, 204, 204, 0.3);
+}
+
+.theme-cyberpunk .card-glow {
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+    border: 1px solid rgba(0, 255, 255, 0.3);
+}
+
+/* Card with priority indicators */
+.card-priority-high {
+    position: relative;
+}
+
+.theme-dark .card-priority-high {
+    border-top: 3px solid #EF4444;
+}
+
+.theme-dark .card-priority-medium {
+    border-top: 3px solid #F59E0B;
+}
+
+.theme-dark .card-priority-low {
+    border-top: 3px solid #3B82F6;
+}
+
+.theme-light .card-priority-high {
+    border-top: 3px solid #DC2626;
+}
+
+.theme-light .card-priority-medium {
+    border-top: 3px solid #D97706;
+}
+
+.theme-light .card-priority-low {
+    border-top: 3px solid #2563EB;
+}
+
+.theme-cyberpunk .card-priority-high {
+    border-top: 3px solid #FF0055;
+}
+
+.theme-cyberpunk .card-priority-medium {
+    border-top: 3px solid #FFD600;
+}
+
+.theme-cyberpunk .card-priority-low {
+    border-top: 3px solid #00BBFF;
+}
+
+/* Card media */
+.card-media {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+}
+
+.card-media img,
+.card-media video {
+    width: 100%;
+    object-fit: cover;
+}

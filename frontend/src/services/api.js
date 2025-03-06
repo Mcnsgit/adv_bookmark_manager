@@ -1,6 +1,7 @@
 // FILE: frontend/src/services/api.js
 import axios from 'axios';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+console.log('API URL:', import.meta.env.VITE_API_URL);
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 /**
  * Axios instance configured for API requests
@@ -8,6 +9,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
  */
 const api = axios.create({
   baseURL: API_URL,
+  timeout:10000,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -17,6 +19,8 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
+    console.log('Using token:', token);
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

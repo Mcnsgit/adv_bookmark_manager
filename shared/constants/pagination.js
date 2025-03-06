@@ -19,7 +19,7 @@ const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 
 module.exports = {
-  DEFAULT_PAGE,
-  DEFAULT_LIMIT,
-  MAX_LIMIT
+  DEFAULT_PAGE: 1,
+  DEFAULT_LIMIT:10,
+  MAX_LIMIT:100
 };

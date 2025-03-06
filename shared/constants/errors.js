@@ -35,7 +35,14 @@ const ErrorCode = {
   };
   
 module.exports = {
-    ErrorCode,
+  ErrorCode: {
+    VALIDATION_ERROR: 'VALIDATION_ERROR',
+    NOT_FOUND: 'NOT_FOUND',
+    UNAUTHORIZED: 'UNAUTHORIZED',
+    FORBIDDEN: 'FORBIDDEN',
+    INVALID_ID: 'INVALID_ID',
+    SERVER_ERROR: 'SERVER_ERROR',
+    },
     DEFAULT_LIMIT,
     DEFAULT_PAGE,
     MAX_LIMIT,
