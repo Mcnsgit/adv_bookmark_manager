@@ -1,6 +1,9 @@
-import { useState } from "react";
+import  { useState } from "react";
+import PropTypes from "prop-types";
 import { toast } from "react-toastify";
 import { bookmarkService } from "../../services/bookmarkService";
+import { useTheme } from "../../context/ThemeContext";
+import "../../styles/components/BookmarkForm.css";
 import {
   Link,
   TextT,
@@ -13,7 +16,9 @@ import {
   X,
 } from "@phosphor-icons/react";
 
-const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
+const BookmarkForm = ({ onBookmarkAdded, onCancel }) => {
+  useTheme();
+  
   const [formData, setFormData] = useState({
     url: "",
     title: "",
@@ -26,28 +31,6 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
   });
 
   const [loading, setLoading] = useState(false);
-
-  // Define theme classes
-  const themeClasses = {
-    text: darkMode ? "text-gray-100" : "text-gray-900",
-    label: darkMode ? "text-gray-300" : "text-gray-700",
-    input: darkMode
-      ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400 focus:ring-cyan-500 focus:border-cyan-500"
-      : "bg-white border-gray-300 text-gray-900 placeholder-gray-400 focus:ring-blue-500 focus:border-blue-500",
-    checkbox: darkMode
-      ? "text-cyan-500 bg-gray-700 border-gray-600 focus:ring-cyan-500"
-      : "text-blue-600 bg-white border-gray-300 focus:ring-blue-500",
-    button: {
-      primary: "bg-cyan-600 hover:bg-cyan-700 text-white",
-      secondary: darkMode
-        ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
-        : "bg-gray-200 hover:bg-gray-300 text-gray-700",
-    },
-    icon: "text-cyan-500",
-    select: darkMode
-      ? "bg-gray-700 border-gray-600 text-white focus:ring-cyan-500 focus:border-cyan-500"
-      : "bg-white border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500",
-  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -109,16 +92,15 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
   };
 
   return (
-    <div className={`${darkMode ? "bg-gray-800" : "bg-white"} rounded-lg`}>
+    <div className="bookmark-form">
       <form onSubmit={handleSubmit}>
         {/* URL Field */}
-        <div className="mb-5">
-          <label
-            htmlFor="url"
-            className={`flex items-center gap-2 text-sm font-medium ${themeClasses.label} mb-2`}
-          >
-            <Link size={18} className={themeClasses.icon} weight="duotone" />
-            URL <span className="text-red-500">*</span>
+        <div className="form-group">
+          <label htmlFor="url" className="form-label">
+            <span className="form-label-icon">
+              <Link size={18} weight="duotone" />
+            </span>
+            URL <span className="form-required">*</span>
           </label>
           <input
             type="text"
@@ -126,19 +108,18 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
             name="url"
             value={formData.url}
             onChange={handleChange}
-            className={`w-full px-4 py-2.5 border rounded-md focus:outline-none focus:ring-2 ${themeClasses.input} transition-colors`}
+            className="form-input"
             placeholder="https://example.com"
             required
           />
         </div>
 
         {/* Title Field */}
-        <div className="mb-5">
-          <label
-            htmlFor="title"
-            className={`flex items-center gap-2 text-sm font-medium ${themeClasses.label} mb-2`}
-          >
-            <TextT size={18} className={themeClasses.icon} weight="duotone" />
+        <div className="form-group">
+          <label htmlFor="title" className="form-label">
+            <span className="form-label-icon">
+              <TextT size={18} weight="duotone" />
+            </span>
             Title
           </label>
           <input
@@ -147,22 +128,17 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
             name="title"
             value={formData.title}
             onChange={handleChange}
-            className={`w-full px-4 py-2.5 border rounded-md focus:outline-none focus:ring-2 ${themeClasses.input} transition-colors`}
+            className="form-input"
             placeholder="My Bookmark"
           />
         </div>
 
         {/* Description Field */}
-        <div className="mb-5">
-          <label
-            htmlFor="description"
-            className={`flex items-center gap-2 text-sm font-medium ${themeClasses.label} mb-2`}
-          >
-            <TextAlignLeft
-              size={18}
-              className={themeClasses.icon}
-              weight="duotone"
-            />
+        <div className="form-group">
+          <label htmlFor="description" className="form-label">
+            <span className="form-label-icon">
+              <TextAlignLeft size={18} weight="duotone" />
+            </span>
             Description
           </label>
           <textarea
@@ -171,18 +147,17 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
             value={formData.description}
             onChange={handleChange}
             rows="3"
-            className={`w-full px-4 py-2.5 border rounded-md focus:outline-none focus:ring-2 ${themeClasses.input} transition-colors`}
+            className="form-textarea"
             placeholder="Brief description of the bookmark"
           />
         </div>
 
         {/* Tags Field */}
-        <div className="mb-5">
-          <label
-            htmlFor="tags"
-            className={`flex items-center gap-2 text-sm font-medium ${themeClasses.label} mb-2`}
-          >
-            <Tag size={18} className={themeClasses.icon} weight="duotone" />
+        <div className="form-group">
+          <label htmlFor="tags" className="form-label">
+            <span className="form-label-icon">
+              <Tag size={18} weight="duotone" />
+            </span>
             Tags (comma separated)
           </label>
           <input
@@ -191,18 +166,17 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
             name="tags"
             value={formData.tags}
             onChange={handleChange}
-            className={`w-full px-4 py-2.5 border rounded-md focus:outline-none focus:ring-2 ${themeClasses.input} transition-colors`}
+            className="form-input"
             placeholder="work, research, tutorial"
           />
         </div>
 
         {/* Favicon Field */}
-        <div className="mb-5">
-          <label
-            htmlFor="favicon"
-            className={`flex items-center gap-2 text-sm font-medium ${themeClasses.label} mb-2`}
-          >
-            <Image size={18} className={themeClasses.icon} weight="duotone" />
+        <div className="form-group">
+          <label htmlFor="favicon" className="form-label">
+            <span className="form-label-icon">
+              <Image size={18} weight="duotone" />
+            </span>
             Favicon URL
           </label>
           <input
@@ -211,34 +185,27 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
             name="favicon"
             value={formData.favicon}
             onChange={handleChange}
-            className={`w-full px-4 py-2.5 border rounded-md focus:outline-none focus:ring-2 ${themeClasses.input} transition-colors`}
+            className="form-input"
             placeholder="https://example.com/favicon.ico"
           />
         </div>
 
         {/* Checkboxes for Reading List and Pinned */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
-          <div
-            className={`p-3 rounded-md border ${
-              darkMode ? "border-gray-700" : "border-gray-200"
-            }`}
-          >
-            <div className="flex items-center">
+        <div className="form-checkbox-group">
+          <div className="form-checkbox-container">
+            <div className="form-checkbox-input">
               <input
                 type="checkbox"
                 id="in_reading_list"
                 name="in_reading_list"
                 checked={formData.in_reading_list}
                 onChange={handleChange}
-                className={`h-4 w-4 rounded focus:ring-offset-0 ${themeClasses.checkbox}`}
+                className="form-checkbox"
               />
-              <label
-                htmlFor="in_reading_list"
-                className={`flex items-center ml-2 text-sm ${themeClasses.text}`}
-              >
+              <label htmlFor="in_reading_list" className="form-checkbox-label">
                 <BookOpen
                   size={18}
-                  className="mr-2"
+                  className="form-checkbox-icon"
                   weight={formData.in_reading_list ? "fill" : "regular"}
                 />
                 Add to Reading List
@@ -246,27 +213,20 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
             </div>
           </div>
 
-          <div
-            className={`p-3 rounded-md border ${
-              darkMode ? "border-gray-700" : "border-gray-200"
-            }`}
-          >
-            <div className="flex items-center">
+          <div className="form-checkbox-container">
+            <div className="form-checkbox-input">
               <input
                 type="checkbox"
                 id="pinned"
                 name="pinned"
                 checked={formData.pinned}
                 onChange={handleChange}
-                className={`h-4 w-4 rounded focus:ring-offset-0 ${themeClasses.checkbox}`}
+                className="form-checkbox"
               />
-              <label
-                htmlFor="pinned"
-                className={`flex items-center ml-2 text-sm ${themeClasses.text}`}
-              >
+              <label htmlFor="pinned" className="form-checkbox-label">
                 <PushPin
                   size={18}
-                  className="mr-2"
+                  className="form-checkbox-icon"
                   weight={formData.pinned ? "fill" : "regular"}
                 />
                 Pin to Top
@@ -277,13 +237,12 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
 
         {/* Reading Priority Dropdown (conditionally rendered) */}
         {formData.in_reading_list && (
-          <div className="mb-6">
-            <label
-              htmlFor="reading_priority"
-              className={`flex items-center gap-2 text-sm font-medium ${themeClasses.label} mb-2`}
-            >
+          <div className="form-select-group">
+            <label htmlFor="reading_priority" className="form-label">
               <svg
-                className="w-5 h-5 text-cyan-500"
+                className="form-label-icon"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
               >
@@ -299,7 +258,7 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
               name="reading_priority"
               value={formData.reading_priority}
               onChange={handleChange}
-              className={`w-full px-4 py-2.5 border rounded-md focus:outline-none focus:ring-2 ${themeClasses.select} transition-colors`}
+              className="form-select"
             >
               <option value="none">None</option>
               <option value="low">Low</option>
@@ -310,25 +269,25 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
         )}
 
         {/* Form Buttons */}
-        <div className="flex justify-end gap-3 mt-8">
+        <div className="form-actions">
           {onCancel && (
             <button
               type="button"
               onClick={onCancel}
-              className={`flex items-center px-5 py-2.5 text-sm font-medium rounded-md transition-colors ${themeClasses.button.secondary}`}
+              className="form-button form-button-secondary"
               disabled={loading}
             >
-              <X size={18} className="mr-2" weight="bold" />
+              <X size={18} className="form-button-icon" weight="bold" />
               Cancel
             </button>
           )}
 
           <button
             type="submit"
-            className={`flex items-center px-5 py-2.5 text-sm font-medium rounded-md transition-colors ${themeClasses.button.primary}`}
+            className="form-button form-button-primary"
             disabled={loading}
           >
-            <Check size={18} className="mr-2" weight="bold" />
+            <Check size={18} className="form-button-icon" weight="bold" />
             {loading ? "Adding..." : "Add Bookmark"}
           </button>
         </div>
@@ -337,4 +296,8 @@ const BookmarkForm = ({ onBookmarkAdded, onCancel, darkMode = true }) => {
   );
 };
 
+BookmarkForm.propTypes = {
+  onBookmarkAdded: PropTypes.func,
+  onCancel: PropTypes.func,
+};
 export default BookmarkForm;

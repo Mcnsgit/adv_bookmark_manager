@@ -339,20 +339,3 @@
       animation: none !important;
     }
   }
-  /* Add this to your global.css */
-.theme-dark h1, .theme-dark h2, .theme-dark h3 {
-    color: #FFFFFF;
-    font-weight: 600;
-  }
-  
-  .theme-cyberpunk h1, .theme-cyberpunk h2 {
-    color: #FFFFFF;
-    font-weight: 600;
-    text-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
-  }
-  
-  .theme-cyberpunk .sidebar-section-title,
-  .theme-cyberpunk .dashboard-section-title {
-    color: #00FFFF;
-    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
-  }

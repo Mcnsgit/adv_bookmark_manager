@@ -69,15 +69,25 @@
 }
 
 /* Button variants - Dark theme */
-.theme-dark .btn-primary {
-    background-color: #0CC;
-    color: #000;
-}
 
-.theme-dark .btn-primary:hover {
-    background-color: #0DD;
-    box-shadow: 0 0 15px rgba(0, 204, 204, 0.5);
-}
+.theme-dark .btn-primary {
+    background-color: #0EE; /* Brighter cyan */
+    color: #000;
+    font-weight: 600;
+  }
+  
+  .theme-cyberpunk .btn-primary {
+    background-color: #00FFFF;
+    color: #000;
+    text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+    border: 1px solid #00AAAA;
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+  }
+  
+  .theme-cyberpunk .btn-primary:hover {
+    background-color: #00FFFF;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+  }
 
 .theme-dark .btn-secondary {
     background-color: #444;

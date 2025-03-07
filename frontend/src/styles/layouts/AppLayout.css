@@ -8,12 +8,18 @@
     width: 100%;
 }
 
-/* Basic layout structure */
-.content-wrapper {
-    flex-grow: 1;
-    overflow-x: hidden;
-    transition: all 0.3s ease;
-}
+/* Update AppLayout.css */
+.theme-dark .content-wrapper {
+    background-color: #1E1E1E; /* Lighter than sidebar */
+  }
+  
+  .theme-light .content-wrapper {
+    background-color: #cdd0d5; /* Light gray instead of white */
+  }
+  
+  .theme-cyberpunk .content-wrapper {
+    background-color: #13132B; /* Slightly lighter than sidebar */
+  }
 
 .sidebar-open .content-wrapper {
     margin-left: 0;

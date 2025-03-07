@@ -1,19 +1,16 @@
-import { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+import  { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
-import { X } from "@phosphor-icons/react";
-import BookmarkForm from "./BookmarkForm";
+import PropTypes from "prop-types";
+import { useFolders } from "../../context/FolderContext";
 import { useTheme } from "../../context/ThemeContext";
+import FolderForm from "./FolderForm";
+import { X } from "@phosphor-icons/react";
 import "../../styles/components/Modal.css";
 
-const BookmarkModal = ({
-  isOpen,
-  onClose,
-  onBookmarkAdded,
-  size = "lg",
-}) => {
+const FolderModal = ({ isOpen, onClose }) => {
   const modalRef = useRef(null);
-   useTheme();
+  const { currentTheme } = useTheme();
+  const { editingFolder } = useFolders();
 
   // Close modal when clicking outside
   useEffect(() => {
@@ -58,10 +55,12 @@ const BookmarkModal = ({
     <div className="modal-overlay">
       <div
         ref={modalRef}
-        className={`modal-container modal-${size}`}
+        className="modal-container modal-md"
       >
         <div className="modal-header">
-          <h2 className="modal-title">Add New Bookmark</h2>
+          <h2 className="modal-title">
+            {editingFolder ? "Edit Folder" : "Create New Folder"}
+          </h2>
           <button
             onClick={onClose}
             className="modal-close-button"
@@ -71,11 +70,9 @@ const BookmarkModal = ({
           </button>
         </div>
         <div className="modal-body">
-          <BookmarkForm
-            onBookmarkAdded={(bookmark) => {
-              onBookmarkAdded(bookmark);
-              onClose();
-            }}
+          <FolderForm
+            folder={editingFolder}
+            onSuccess={() => onClose()}
             onCancel={onClose}
           />
         </div>
@@ -85,11 +82,9 @@ const BookmarkModal = ({
   );
 };
 
-BookmarkModal.propTypes = {
+FolderModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onBookmarkAdded: PropTypes.func.isRequired,
-  size: PropTypes.oneOf(["sm", "md", "lg", "full"]),
+  onClose: PropTypes.func.isRequired
 };
 
-export default BookmarkModal;
+export default FolderModal;

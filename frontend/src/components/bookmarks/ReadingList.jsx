@@ -2,6 +2,7 @@ import { useState } from "react";
 import BookmarkCard from "./BookmarkCard";
 import BookmarkModal from "./BookmarkModal";
 import { useBookmarks } from "../../context/BookmarkContext";
+import { useTheme } from "../../context/ThemeContext";
 import {
   MagnifyingGlass,
   Plus,
@@ -11,7 +12,9 @@ import {
   SortDescending,
 } from "@phosphor-icons/react";
 
-const ReadingList = ({ darkMode = true }) => {
+const ReadingList = () => {
+
+    useTheme();
   const {
     loading,
     error,
@@ -45,30 +48,6 @@ const ReadingList = ({ darkMode = true }) => {
   );
 
   // Define theme classes
-  const themeClasses = {
-    background: darkMode ? "bg-gray-900" : "bg-gray-100",
-    text: darkMode ? "text-gray-100" : "text-gray-900",
-    secondaryText: darkMode ? "text-gray-400" : "text-gray-600",
-    card: darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300",
-    input: darkMode
-      ? "bg-gray-800 border-gray-700 text-white"
-      : "bg-white border-gray-300",
-    primaryButton: "bg-purple-600 hover:bg-purple-700 text-white",
-    secondaryButton: darkMode
-      ? "bg-gray-700 hover:bg-gray-600 text-gray-300"
-      : "bg-gray-200 hover:bg-gray-300 text-gray-700",
-    highlight: "text-cyan-400",
-    tagSelected: "bg-cyan-500 text-white",
-    tagNormal: darkMode
-      ? "bg-gray-700 text-gray-300"
-      : "bg-gray-200 text-gray-700",
-    sortActive: darkMode
-      ? "bg-cyan-900 text-cyan-300 border-cyan-700"
-      : "bg-cyan-100 text-cyan-700 border-cyan-300",
-    sortInactive: darkMode
-      ? "bg-gray-800 text-gray-400 border-gray-700"
-      : "bg-gray-100 text-gray-600 border-gray-300",
-  };
 
   // Get priority counts for stats
   const priorityCounts = getPriorityCounts();
@@ -82,7 +61,7 @@ const ReadingList = ({ darkMode = true }) => {
   }
 
   return (
-    <div>
+    <div className="">
       {/* Header with search and add button */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
         <div className="flex items-center">
@@ -92,12 +71,10 @@ const ReadingList = ({ darkMode = true }) => {
 
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
           <div className="relative w-full sm:w-64">
-            <input
-              type="text"
-              placeholder="Search reading list..."
+            <input placeholder="Search reading list..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className={`w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 ${themeClasses.input}`}
+              className={`w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-500 ${useTheme.input}`}
             />
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <MagnifyingGlass size={20} className="text-gray-400" />
@@ -106,7 +83,7 @@ const ReadingList = ({ darkMode = true }) => {
 
           <button
             onClick={() => setIsModalOpen(true)}
-            className={`flex items-center px-4 py-2 rounded-md transition-colors ${themeClasses.primaryButton}`}
+            className={`flex items-center px-4 py-2 rounded-md transition-colors ${useTheme.primaryButton}`}
           >
             <Plus size={20} className="mr-2" weight="bold" />
             Add to Reading List
